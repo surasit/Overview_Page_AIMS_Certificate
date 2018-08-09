@@ -1,0 +1,569 @@
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    
+  
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Countries', 'Staff Information', 'Certificate: Signed 1 person', 'Certificate: Signed 2 persons', 'Certificate: Signed 3 persons'],
+          ['Brunei Darussalam', 1, 2, 2, 0],
+          ['Indonesia', 4, 44, 3, 0],
+          ['Japan', 11, 47, 127, 3],
+		  ['South Korea', 10, 44, 31, 53],
+		  ['Malaysia', 7, 53, 158, 2],
+		  ['Philippines', 3, 13, 10, 0],
+		  ['Thailand', 6, 86, 69, 0],
+		  ['Vietnam', 9, 6, 39, 0],
+          
+        ]);
+
+        var options = {
+          chart: {
+            title: 'Update 1 August 2018',
+            subtitle: '',
+          }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
+    </script>
+	
+	<script type="text/javascript">
+	  /*
+Please consider that the JS part isn't production ready at all, I just code it to show the concept of merging filters and titles together !
+*/
+$(document).ready(function(){
+    $('.filterable .btn-filter').click(function(){
+        var $panel = $(this).parents('.filterable'),
+        $filters = $panel.find('.filters input'),
+        $tbody = $panel.find('.table tbody');
+        if ($filters.prop('disabled') == true) {
+            $filters.prop('disabled', false);
+            $filters.first().focus();
+        } else {
+            $filters.val('').prop('disabled', true);
+            $tbody.find('.no-result').remove();
+            $tbody.find('tr').show();
+        }
+    });
+
+    $('.filterable .filters input').keyup(function(e){
+        /* Ignore tab key */
+        var code = e.keyCode || e.which;
+        if (code == '9') return;
+        /* Useful DOM data and selectors */
+        var $input = $(this),
+        inputContent = $input.val().toLowerCase(),
+        $panel = $input.parents('.filterable'),
+        column = $panel.find('.filters th').index($input.parents('th')),
+        $table = $panel.find('.table'),
+        $rows = $table.find('tbody tr');
+        /* Dirtiest filter function ever ;) */
+        var $filteredRows = $rows.filter(function(){
+            var value = $(this).find('td').eq(column).text().toLowerCase();
+            return value.indexOf(inputContent) === -1;
+        });
+        /* Clean previous no-result if exist */
+        $table.find('tbody .no-result').remove();
+        /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+        $rows.show();
+        $filteredRows.hide();
+        /* Prepend no-result row if all rows are filtered */
+        if ($filteredRows.length === $rows.length) {
+            $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
+        }
+    });
+});
+	</script>
+	
+  </head>
+  <body>
+  
+  <div class="col-sm-12" >
+  <br><CENTER><img src="http://www.aims-rihed.net/overview_aims/logo.jpg"  class="img-responsive" alt="Responsive image" WIDTH="450" HEIGHT="62"></CENTER>
+    <br><center><h2>Overview page : AIMS Certificate</h2></center>
+	
+	<div class="container">
+	<div id="columnchart_material" style="width: 1200px; height: 550px;"></div>
+    </div>
+	 
+	<div class="col-sm-10"> 
+	
+	<br>
+	
+	<table style="width:100%">
+  <tr>
+    <th><b><u><h5>Totals:</h5></u></b></th>
+    <th>Staff Information: <font color="red">51</font></th> 
+    <th>Certificate Signed 1 person: <font color="red">295</font></th>
+	<th>Certificate Signed 2 persons: <font color="red">439</font></th>
+	<th>Certificate Signed 3 persons: <font color="red">58</font></th>
+  </tr>
+ 
+</table>
+
+<br>
+	</div>
+	
+	<!-- Table -->
+	<div class="container"> 
+	      
+		
+
+
+
+
+
+<!--Table-->
+
+	</div>
+	
+
+  </div>
+  
+ 
+  
+  <div class="col-sm-12">
+    <div class="row">
+        <div class="panel panel-primary filterable">
+            <div class="panel-heading">
+                <h3 class="panel-title"></h3>
+                <div class="pull-right">
+                    <!--<button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter Universities</button>-->
+                </div>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr class="filters">
+                         <th style="width: 20%"><h4>Countries</h4></th>
+                         <th style="width: 40%"><center><h4>Universities</h4></th>
+                         <th style="width: 10%"><center><i>Staff Information</br></i></center></th>
+                        <th style="width: 10%"><center><i>Certificate Signed 1 person</i></center></th>
+						<th style="width: 10%"><center><i>Certificate Signed 2 persons</i></center></th>
+						<th style="width: 10%"><center><i>Certificate Signed 3 persons</i></center></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                         <th></th>
+            <td></td>
+            <td><center></center></td>
+            <td><center></center></td>
+			<td><center></center></td>
+            <td><center></center></td>
+                    </tr>
+					<!-- Brunei Darussalam -->
+                    <tr bgcolor="#F9F8F6">
+                       <td><b><img src="brunei.png" alt="brunei">&nbsp;<u>Brunei Darussalam</b></u></td>
+                       <td>Universiti Brunei Darussalam </td>
+                       <td><center>1</center></td>
+                       <td><center>2</center></td>
+					   <td><center>2</center></td>
+					   <td><center>0</center></td>
+                    </tr>	  
+                    <tr>
+                       <td><b><u></b></u></td>
+                       <td></td>
+                       <td><center></center></td>
+                       <td><center></center></td>
+					   <td><center></center></td>
+					   <td><center></center></td>					 
+                    </tr>				
+					<!-- Indonesia -->
+                    <tr bgcolor="#F9F8F6">
+                       <td><b><img src="indonesia.png" alt="indonesia">&nbsp;<u>Indonesia</b></u></td>
+                       <td>University Gadjah Mada</td>
+                       <td><center>2</center></td>
+                       <td><center>19</center></td>
+					   <td><center>1</center></td>
+					   <td><center>0</center></td>					 
+                    </tr>			
+					<tr bgcolor="#F9F8F6">
+                       <td></td>
+                       <td>BINUS University</td>
+                       <td><center>0</center></td>
+                       <td><center>0</center></td>
+					   <td><center>1</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td></td>
+                       <td>Bogor Agricultural University</td>
+                       <td><center>0</center></td>
+                       <td><center>2</center></td>
+					   <td><center>1</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td></td>
+                       <td>Universitas Indonesia</td>
+                       <td><center>2</center></td>
+                       <td><center>23</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					
+					<tr>
+                       <td><b><u></b></u></td>
+                       <td></td>
+                       <td><center></center></td>
+                       <td><center></center></td>
+					   <td><center></center></td>
+					   <td><center></center></td>					 
+                    </tr>
+					
+					<!-- Japan -->
+					<tr bgcolor="#F9F8F6">
+                       <td><b><img src="japan.png" alt="japan">&nbsp;<u>Japan</b></u></td>
+                       <td>Ritsumeikan University</td>
+                       <td><center>2</center></td>
+                       <td><center>27</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td></td>
+                       <td>Tokyo University of Agriculture and Technology</td>
+                       <td><center>1</center></td>
+                       <td><center>0</center></td>
+					   <td><center>0</center></td>
+					   <td><center>2</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td></td>
+                       <td>University of Tsukuba</td>
+                       <td><center>5</center></td>
+                       <td><center>0</center></td>
+					   <td><center>123</center></td>
+					   <td><center>1</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td></td>
+                       <td>Waseda University</td>
+                       <td><center>1</center></td>
+                       <td><center>1</center></td>
+					   <td><center>1</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td></td>
+                       <td>Sophia University</td>
+                       <td><center>2</center></td>
+                       <td><center>19</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td></td>
+                       <td>Hiroshima University</td>
+                       <td><center>0</center></td>
+                       <td><center>0</center></td>
+					   <td><center>3</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					
+					<tr>
+                       <td><b><u></b></u></td>
+                       <td></td>
+                       <td><center></center></td>
+                       <td><center></center></td>
+					   <td><center></center></td>
+					   <td><center></center></td>					 
+                    </tr>
+					
+					<!-- South Korea -->
+					<tr bgcolor="#F9F8F6">
+                       <td><b><img src="south-korea.png" alt="south-korea">&nbsp;<u>South Korea</b></u></td>
+                       <td>Catholic University of Daegu</td>
+                       <td><center>6</center></td>
+                       <td><center>4</center></td>
+					   <td><center>31</center></td>
+					   <td><center>53</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Chonnam National University</td>
+                       <td><center>1</center></td>
+                       <td><center>10</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Kangwon National University</td>
+                       <td><center>3</center></td>
+                       <td><center>30</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr>
+                       <td><b><u></b></u></td>
+                       <td></td>
+                       <td><center></center></td>
+                       <td><center></center></td>
+					   <td><center></center></td>
+					   <td><center></center></td>					 
+                    </tr>
+					<!-- Malaysia -->
+					<tr bgcolor="#F9F8F6">
+                       <td><b><img src="malaysia.png" alt="malaysia">&nbsp;<u>Malaysia</b></u></td>
+                       <td>University Teknologi MARA (UiTM)</td>
+                       <td><center>3</center></td>
+                       <td><center>42</center></td>
+					   <td><center>2</center></td>
+					   <td><center>2</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>University of Malaya</td>
+                       <td><center>2</center></td>
+                       <td><center>0</center></td>
+					   <td><center>133</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Universiti Kebangsaan Malaysia</td>
+                       <td><center>0</center></td>
+                       <td><center>6</center></td>
+					   <td><center>1</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Universiti Utara Malaysia</td>
+                       <td><center>0</center></td>
+                       <td><center>0</center></td>
+					   <td><center>2</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Universiti Malaysia Terengganu</td>
+                       <td><center>1</center></td>
+                       <td><center>5</center></td>
+					   <td><center>21</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr>
+                       <td><b><u></b></u></td>
+                       <td></td>
+                       <td><center></center></td>
+                       <td><center></center></td>
+					   <td><center></center></td>
+					   <td><center></center></td>					 
+                    </tr>
+					<!-- Philippines -->
+					<tr bgcolor="#F9F8F6">
+                       <td><b><img src="philippines.png" alt="philippines">&nbsp;<u>Philippines</b></u></td>
+                       <td>University of Mindanao</td>
+                       <td><center>1</center></td>
+                       <td><center>0</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>University of St. La Salle</td>
+                       <td><center>1</center></td>
+                       <td><center>0</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>University of the Philippines</td>
+                       <td><center>0</center></td>
+                       <td><center>0</center></td>
+					   <td><center>2</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Central Bicol State University of Agriculture</td>
+                       <td><center>1</center></td>
+                       <td><center>0</center></td>
+					   <td><center>3</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Central Luzon State University</td>
+                       <td><center>0</center></td>
+                       <td><center>0</center></td>
+					   <td><center>1</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>University of Santo Tomas</td>
+                       <td><center>0</center></td>
+                       <td><center>0</center></td>
+					   <td><center>4</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>De la Salle University</td>
+                       <td><center>1</center></td>
+                       <td><center>13</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr>
+                       <td><b><u></b></u></td>
+                       <td></td>
+                       <td><center></center></td>
+                       <td><center></center></td>
+					   <td><center></center></td>
+					   <td><center></center></td>					 
+                    </tr>
+					<!-- Thailand -->
+					<tr bgcolor="#F9F8F6">
+                       <td><b><img src="thailand.png" alt="thailand">&nbsp;<u>Thailand</b></u></td>
+                       <td>Chulalongkorn University</td>
+                       <td><center>1</center></td>
+                       <td><center>0</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>King Mongkut’s University of Technology Thonburi</td>
+                       <td><center>1</center></td>
+                       <td><center>0</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Mae Fah Luang University</td>
+                       <td><center>1</center></td>
+                       <td><center>0</center></td>
+					   <td><center>55</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Thammasat University</td>
+                       <td><center>2</center></td>
+                       <td><center>70</center></td>
+					   <td><center>5</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Kasetsart University</td>
+                       <td><center>0</center></td>
+                       <td><center>0</center></td>
+					   <td><center>2</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Chiang Mai University</td>
+                       <td><center>1</center></td>
+                       <td><center>14</center></td>
+					   <td><center>7</center></td>
+					   <td><center>0</center></td>
+                    </tr>					
+					<tr>
+                       <td><b><u></b></u></td>
+                       <td></td>
+                       <td><center></center></td>
+                       <td><center></center></td>
+					   <td><center></center></td>
+					   <td><center></center></td>					 
+                    </tr>
+					<!-- Vietnam -->
+					<tr bgcolor="#F9F8F6">
+                       <td><b><img src="vietnam.png" alt="vietnam">&nbsp;<u>Vietnam</b></u></td>
+                       <td>Thai Nguyen University of Agriculture and Forestry</td>
+                       <td><center>5</center></td>
+                       <td><center>2</center></td>
+					   <td><center>32</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Vietnam National University of Agriculture</td>
+                       <td><center>2</center></td>
+                       <td><center>4</center></td>
+					   <td><center>5</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>University of Transport and Communications (UTC)</td>
+                       <td><center>1</center></td>
+                       <td><center>0</center></td>
+					   <td><center>0</center></td>
+					   <td><center>0</center></td>
+                    </tr>
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u></b></u></td>
+                       <td>Thuyloi University</td>
+                       <td><center>1</center></td>
+                       <td><center>0</center></td>
+					   <td><center>2</center></td>
+					   <td><center>0</center></td>
+                    </tr>					
+					<tr>
+                       <td><b><u></b></u></td>
+                       <td></td>
+                       <td><center></center></td>
+                       <td><center></center></td>
+					   <td><center></center></td>
+					   <td><center></center></td>					 
+                    </tr>
+					<!-- TOTALS -->
+					<tr bgcolor="#F9F8F6">
+                       <td><b><u><font color="#002266">TOTALS</font></b></u></td>
+                       <td></td>
+                       <td><center><b><font color="#002266">51</font></font></b></center></td>
+                       <td><center><b><font color="#002266">295</font></b></center></td>
+					   <td><center><b><font color="#002266">439</font></b></center></td>
+					   <td><center><b><font color="#002266">58</font></b></center></td>
+                    </tr>
+					<tr>
+                       <td><b><u></b></u></td>
+                       <td></td>
+                       <td><center></center></td>
+                       <td><center></center></td>
+					   <td><center></center></td>
+					   <td><center></center></td>					 
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+  
+ <br> 
+  
+  
+  <div class="container">      
+  <i><p>Overview page AIMS Certificate | V.01.2018 | <a href="http://www.aims-rihed.net">The AIMS Website</a>&nbsp;&nbsp;<img src="QR-CODE.png" alt="QR-CODE" width="40" height="40"></p></i></br>
+  </div>
+	
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+  </body>
+</html>
